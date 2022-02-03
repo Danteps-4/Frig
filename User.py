@@ -1,14 +1,16 @@
 class User:
-    def __init__(self, id_user=None, username=None, password=None, games_played=None, win_games=None, lost_games=None):
+    def __init__(self, id_user=None, username=None, password=None, games_played=None, win_games=None, lost_games=None, wins_percentage=None, profile_picture=None):
         self._id_user = id_user
         self._username = username
         self._password = password
         self._games_played = games_played
         self._win_games = win_games
         self._lost_games = lost_games
+        self._wins_percentage = wins_percentage
+        self._profile_picture = profile_picture
 
     def __str__(self):
-        return f"ID user: {self._id_user}, Username: {self._username}, Password: {self._password}, Games played: {self._games_played}, Games won: {self._win_games}, Games lost: {self._lost_games}"
+        return f"ID user: {self._id_user}, Username: {self._username}, Password: {self._password}, Games played: {self._games_played}, Games won: {self._win_games}, Games lost: {self._lost_games}, Wins %: {self._wins_percentage}, Profile picture: {self._profile_picture}"
 
     @property
     def id_user(self):
@@ -57,6 +59,22 @@ class User:
     @lost_games.setter
     def lost_games(self, lost_games):
         self._lost_games = lost_games
+
+    @property
+    def wins_percentage(self):
+        return self._wins_percentage
+
+    @wins_percentage.setter
+    def wins_percentage(self, wins_percentage):
+        self._wins_percentage = wins_percentage
+
+    @property
+    def profile_picture(self):
+        return self._profile_picture
+
+    @profile_picture.setter
+    def profile_picture(self, profile_picture):
+        self._profile_picture = profile_picture
 
 if __name__ == "__main__":
     user = User(1, "dante", "dante123", 10, 5, 5)

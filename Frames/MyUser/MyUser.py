@@ -8,7 +8,7 @@ class MyUser:
         self._master = master
 
         #Create the frame
-        self._myuser_frame = ttk.Frame(self._master)
+        self._myuser_frame = tk.Frame(self._master)
 
         # Add the frame to the master
         self._master.add(self._myuser_frame, text="My User")
@@ -17,68 +17,71 @@ class MyUser:
     def myuser_components(self):
         # Get user data
         user_data = self._get_user_data()
+        self._create_top_frame(user_data)
+        self._create_bottom_frame()
 
-        # Username
-        label_username = ttk.Label(self._myuser_frame, text="User: ")
-        label_username.grid(row=0, column=0)
-        username_data = user_data[1]
-        username = ttk.Label(self._myuser_frame, text=username_data)
-        username.grid(row=0, column=1)
+    def _create_top_frame(self, user_data):
+        self.top_frame = tk.Frame(self._myuser_frame, width=800)
+        self.top_frame.pack()
 
         # Id user
-        label_user_id = ttk.Label(self._myuser_frame, text="User ID:")
-        label_user_id.grid(row=1, column=0)
         user_id_data = user_data[0]
-        user_id = ttk.Label(self._myuser_frame, text=user_id_data)
-        user_id.grid(row=1, column=1)
+        label_user_id = ttk.Label(self.top_frame, text=f"User ID: {user_id_data}", font=("Arial", 14))
+        label_user_id.pack(pady=8)
+
+        # Username
+        username_data = user_data[1]
+        label_username = ttk.Label(self.top_frame, text=f"Username: {username_data}", font=("Arial", 14))
+        label_username.pack(pady=8)
+
+        # Password
+        password_data = user_data[2]
+        password_list = []
+        # Converting the password into a string fill with *
+        for word in password_data:
+            password_list.append("*")
+        password = " ".join([str(item) for item in password_list])
+
+        label_password = ttk.Label(self.top_frame, text=f"Password: {password}", font=("Arial", 14))
+        label_password.pack(pady=8)
 
         # Games played
-        label_games_played = ttk.Label(self._myuser_frame, text="Games played: ")
-        label_games_played.grid(row=2, column=0)
         games_played_data = user_data[3]
-        games_played = ttk.Label(self._myuser_frame, text=user_data[3])
-        games_played.grid(row=2, column=1)
+        label_games_played = ttk.Label(self.top_frame, text=f"Games played: {games_played_data}", font=("Arial", 14))
+        label_games_played.pack(pady=8)
 
         # Win games
-        label_win_games = ttk.Label(self._myuser_frame, text="Win games: ")
-        label_win_games.grid(row=3, column=0)
         win_games_data = user_data[4]
-        win_games = ttk.Label(self._myuser_frame, text=user_data[4])
-        win_games.grid(row=3, column=1)
+        label_win_games = ttk.Label(self.top_frame, text=f"Win games: {win_games_data}", font=("Arial", 14))
+        label_win_games.pack(pady=8)
 
         # Lost games
-        label_lost_games = ttk.Label(self._myuser_frame, text="Lost games: ")
-        label_lost_games.grid(row=4, column=0)
         lost_games_data = user_data[5]
-        lost_games = ttk.Label(self._myuser_frame, text=user_data[5])
-        lost_games.grid(row=4, column=1)
+        label_lost_games = ttk.Label(self.top_frame, text=f"Lost games: {lost_games_data}", font=("Arial", 14))
+        label_lost_games.pack(pady=8)
 
-        # User stats
-        label_stats = ttk.Label(self._myuser_frame, text=f"{user_data[1]}'s stats:")
-        label_stats.grid(row=5, column=0)
+        # Draws
+        draws_data = self._get_draws(games_played_data, win_games_data, lost_games_data)
+        label_draws = ttk.Label(self.top_frame, text=f"Draws: {draws_data}", font=("Arial", 14))
+        label_draws.pack(pady=8)
 
-        # Create a table
-        treeview = ttk.Treeview(self._myuser_frame, columns=(1,2,3,4,5),show="headings", height="1")
-        treeview.grid(row=6, column=0)
-        treeview.heading(1, text="Games played")
-        treeview.heading(2, text="Wins")
-        treeview.heading(3, text="Losts")
-        treeview.heading(4, text="Draws")
-        treeview.heading(5, text="Wins %")
-        treeview.column(1, minwidth=50, width=100, anchor=tk.CENTER)
-        treeview.column(2, minwidth=50, width=100, anchor=tk.CENTER)
-        treeview.column(3, minwidth=50, width=100, anchor=tk.CENTER)
-        treeview.column(4, minwidth=50, width=100, anchor=tk.CENTER)
-        treeview.column(5, minwidth=50, width=100, anchor=tk.CENTER)
+        # Win percentage
+        win_percentage_data = self._get_wins_percentage(games_played_data, win_games_data, draws_data)
+        label_win_percentage = ttk.Label(self.top_frame, text=f"Win percentage: {round(win_percentage_data, 2)}%", font=("Arial", 14))
+        label_win_percentage.pack(pady=8)
 
-        # Get the draws
-        draws = self._get_draws(games_played_data, win_games_data, lost_games_data)
 
-        # Get the win_percentage
-        wins_percentage = self._get_wins_percentage(games_played_data, win_games_data, draws)
+    def _create_bottom_frame(self):
+        self.bottom_frame = tk.Frame(self._myuser_frame, width=800, height=300)
+        self.bottom_frame.pack()
 
-        # Insert the data on the treeview
-        treeview.insert("", tk.END, values=(games_played_data, win_games_data, lost_games_data, draws, wins_percentage))
+        # Buttons
+        # Refresh
+        refresh_button = tk.Button(self.bottom_frame, text="Refresh", width=15, command=self._refresh)
+        refresh_button.grid(row=0, column=0, pady=15, padx=15)
+        # Settings
+        # settings_button = tk.Button(self.bottom_frame, text="Settings", width=15)
+        # settings_button.grid(row=0, column=1, pady=15, padx=15)
 
 
     def _get_user_data(self):
@@ -93,3 +96,10 @@ class MyUser:
     def _get_draws(self, games_played, win_games, lost_games):
         draws = games_played - (win_games + lost_games)
         return draws
+
+    def _refresh(self):
+        self.top_frame.destroy()
+        self.bottom_frame.destroy()
+        user_data = self._get_user_data()
+        self._create_top_frame(user_data)
+        self._create_bottom_frame()

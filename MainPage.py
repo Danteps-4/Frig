@@ -7,6 +7,7 @@ from Frames.MyUser.MyUser import MyUser
 from widgets.Colors import Colors
 from Frames.AboutUs.AboutUs import AboutUs
 from Frames.Ranking.Ranking import Ranking
+from Frames.Game.Game import Game
 
 class MainPage(tk.Tk):
     def __init__(self):
@@ -22,11 +23,11 @@ class MainPage(tk.Tk):
         # Notebook pages
         notebook_control = ttk.Notebook(self)
 
-        # Game page
-        game_frame = ttk.Frame(notebook_control)
-        notebook_control.add(game_frame, text="Game")
+        # Game page (on process)
+        game_frame = Game(notebook_control)
+        game_frame.game_components()
 
-        # Ranking page (on process)
+        # Ranking page (done)
         ranking_frame = Ranking(notebook_control)
         ranking_frame.ranking_components()
 
@@ -34,7 +35,7 @@ class MainPage(tk.Tk):
         user_frame = MyUser(notebook_control)
         user_frame.myuser_components()
 
-        # Instruction page (done)
+        # Instructions page (done)
         instructions_frame = Instructions(notebook_control)
         instructions_frame.instructions_components()
 
